@@ -3,6 +3,10 @@ var columns = 4;
 var board;
 var score = 0;
 
+function isMobile() {
+  return window.innerWidth <= 768; // Adjust this threshold as needed
+}
+
 window.onload = function () {
   setGame();
 };
@@ -28,7 +32,6 @@ function setGame() {
   setTwo();
 }
 
-
 function updateTile(tile, num) {
   tile.innerText = "";
   tile.classList.value = "";
@@ -43,25 +46,45 @@ function updateTile(tile, num) {
   }
 }
 
-
-document.addEventListener("keyup", (e) => {
-  if (e.code == "ArrowLeft") {
+if (isMobile()) {
+  document.addEventListener("swiped-left", () => {
     slideLeft();
     setTwo();
-  } else if (e.code == "ArrowRight") {
+  });
+
+  document.addEventListener("swiped-right", () => {
     slideRight();
     setTwo();
-  } else if (e.code == "ArrowUp") {
+  });
+
+  document.addEventListener("swiped-up", () => {
     slideUp();
     setTwo();
-  } else if (e.code == "ArrowDown") {
+  });
+
+  document.addEventListener("swiped-down", () => {
     slideDown();
     setTwo();
-  }
-  console.log(score);
-  document.getElementById("score").innerText = score;
-});
-
+  });
+} else {
+  // Add non-mobile event listeners
+  document.addEventListener("keyup", (e) => {
+    if (e.code == "ArrowLeft") {
+      slideLeft();
+      setTwo();
+    } else if (e.code == "ArrowRight") {
+      slideRight();
+      setTwo();
+    } else if (e.code == "ArrowUp") {
+      slideUp();
+      setTwo();
+    } else if (e.code == "ArrowDown") {
+      slideDown();
+      setTwo();
+    }
+    document.getElementById("score").innerText = score;
+  });
+}
 
 function filterZero(row) {
   return row.filter((num) => num != 0); // create a new array without zeroes
@@ -96,7 +119,6 @@ function setTwo() {
   }
 }
 
-
 function slide(row) {
   row = filterZero(row);
 
@@ -115,7 +137,6 @@ function slide(row) {
   return row;
 }
 
-
 function slideLeft() {
   for (let r = 0; r < rows; r++) {
     let row = board[r];
@@ -128,7 +149,6 @@ function slideLeft() {
     }
   }
 }
-
 
 function slideRight() {
   for (let r = 0; r < rows; r++) {
@@ -144,7 +164,6 @@ function slideRight() {
     }
   }
 }
-
 
 function slideUp() {
   for (let c = 0; c < columns; c++) {
